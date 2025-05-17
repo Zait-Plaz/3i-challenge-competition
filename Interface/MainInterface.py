@@ -7,7 +7,7 @@ from ultralytics import YOLO
 
 yolo_model = YOLO("yolov8n.pt")
 
-keras_model = tf.keras.models.load_model("final_model.keras")
+keras_model = tf.keras.models.load_model("cnn.keras")
 input_height, input_width = keras_model.input_shape[1:3]
 
 target_labels = [
