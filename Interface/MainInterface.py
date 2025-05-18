@@ -5,13 +5,19 @@ import numpy as np
 import tensorflow as tf
 from ultralytics import YOLO
 
-yolo_model = YOLO("yolov8n.pt")
+try:
+    yolo_model = YOLO("yolov8n.pt")
+except Exception as e:
+    raise RuntimeError(f"❌ Failed to load YOLO model: {e}")
 
-keras_model = tf.keras.models.load_model("cnn.keras")
-input_height, input_width = keras_model.input_shape[1:3]
+try:
+    keras_model = tf.keras.models.load_model("cnn.keras")
+    input_height, input_width = keras_model.input_shape[1:3]
+except Exception as e:
+    raise RuntimeError(f"❌ Failed to load Keras model: {e}")
 
 target_labels = [
-    "Ca hu kho", "Canh cai", "Canh chua", "Com trang", "Dau hu sot ca",
+    "Ca hu kho", "Canh cai", "Canh chua", "Com", "Dau hu sot ca",
     "Ga chien", "Rau muong xao", "Thit kho", "Thit kho trung", "Trung chien"
 ]
 
@@ -19,7 +25,7 @@ price_table = {
     "Ca hu kho": 22000,
     "Canh cai": 9000,
     "Canh chua": 10000,
-    "Com": 5000,
+    "Com g": 5000,
     "Dau hu sot ca": 16000,
     "Ga chien": 25000,
     "Rau muong xao": 8000,
@@ -35,13 +41,17 @@ def detect_and_classify(image):
         detections = results[0].boxes.data.cpu().numpy()
 
         seen_classes = set()
+        h, w, _ = image_bgr.shape
 
         for det in detections:
             x1, y1, x2, y2, score, class_id = det
             if score < 0.3:
                 continue
 
-            crop = image_bgr[int(y1):int(y2), int(x1):int(x2)]
+            x1, y1 = max(0, int(x1)), max(0, int(y1))
+            x2, y2 = min(w, int(x2)), min(h, int(y2))
+
+            crop = image_bgr[y1:y2, x1:x2]
             if crop.size == 0:
                 continue
 
@@ -50,13 +60,13 @@ def detect_and_classify(image):
             predictions = keras_model.predict(input_data, verbose=0)
             predicted_index = int(np.argmax(predictions[0]))
             predicted_label = target_labels[predicted_index]
-
+            print(f"✅ Detected: {predicted_label} ({score:.2f})")
             seen_classes.add(predicted_label)
 
         if not seen_classes:
             return "⚠️ Không phát hiện được món ăn", "0đ"
 
-        result_text = "\\n".join(
+        result_text = "\n".join(
             [f"🍽️ {food}: {price_table[food]:,}đ" for food in sorted(seen_classes)]
         )
         total_price = sum([price_table[food] for food in seen_classes])
@@ -68,7 +78,7 @@ def detect_and_classify(image):
 with gr.Blocks(theme=gr.themes.Soft()) as demo:
     gr.Markdown("## 🍱 Nhận Diện Món Ăn & Tính Tiền")
     with gr.Row():
-        image_input = gr.Image(type="numpy", label="📷 Ảnh khay cơm")
+        image_input = gr.Image(type="numpy", label="📷 Ảnh khay cơm", tool="editor")
     with gr.Row():
         food_output = gr.Textbox(label="📋 Món ăn và giá", lines=10)
         total_output = gr.Textbox(label="💵 Tổng hóa đơn")
