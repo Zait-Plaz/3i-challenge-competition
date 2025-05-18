@@ -27,6 +27,9 @@ Dự án này xây dựng một hệ thống trí tuệ nhân tạo có khả n�
 
 ### 2. Cài đặt thư viện
 ```bash
+cd Path/to/file.py
+```
+```bash
 pip install gradio ultralytics tensorflow opencv-python numpy
 ```
 
@@ -38,7 +41,11 @@ pip install gradio ultralytics tensorflow opencv-python numpy
 
 ## Hướng dẫn sử dụng
 
-1. **Chạy ứng dụng**:
+1. **Chạy ứng dụng**:(qua powershell/CMD)
+```bash
+cd Path/to/file.py
+```
+
 ```bash
 python Main.py
 ```
@@ -60,7 +67,7 @@ python Main.py
 
 | Thành phần | Vai trò |
 |------------|---------|
-| Python ≥ 3.8 | Ngôn ngữ chính |
+| Python 3.10 | Ngôn ngữ chính |
 | YOLOv8 (Ultralytics) | Nhận diện vật thể |
 | TensorFlow / Keras | Phân loại món ăn |
 | Gradio | Giao diện web |
