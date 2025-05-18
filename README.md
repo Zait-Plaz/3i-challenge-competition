@@ -66,7 +66,7 @@ python Main.py
 | Gradio | Giao diện web |
 | OpenCV | Xử lý ảnh |
 | NumPy | Xử lý mảng số |
-| Camera (tuỳ chọn) | Nếu muốn tích hợp thời gian thực |
+| Camera (tuỳ chọn) | Chụp ảnh thời gian thực |
 
 ---
 
