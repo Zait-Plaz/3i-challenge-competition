@@ -1,4 +1,3 @@
-pip install gradio ultralytics tensorflow opencv-python numpy
 import gradio as gr
 import cv2
 import numpy as np
