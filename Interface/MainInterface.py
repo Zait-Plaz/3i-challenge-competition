@@ -142,7 +142,6 @@ with gr.Blocks(title="Nhận Diện Món Ăn - UEH", theme=gr.themes.Soft(primar
     )
     gr.HTML("<center style='color:gray'>© 2025 - Đồ án Trí tuệ Nhân tạo - UEH</center>")
 
-# ===== Chạy ứng dụng =====
 if __name__ == "__main__":
     demo.launch(inbrowser=True)
 
