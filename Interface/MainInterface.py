@@ -16,16 +16,16 @@ target_labels = [
 ]
 
 price_table = {
-    "Ca hu kho": 25000,
-    "Canh cai": 10000,
-    "Canh chua": 30000,
-    "Com trang": 5000,
-    "Dau hu sot ca": 25000,
-    "Ga chien": 20000,
+    "Ca hu kho": 22000,
+    "Canh cai": 9000,
+    "Canh chua": 10000,
+    "Com": 5000,
+    "Dau hu sot ca": 16000,
+    "Ga chien": 25000,
     "Rau muong xao": 8000,
-    "Thit kho": 25000,
-    "Thit kho trung": 25000,
-    "Trung chien": 6000
+    "Thit kho": 17000,
+    "Thit kho trung": 18000,
+    "Trung chien": 12000
 }
 
 def detect_and_classify(image):
@@ -66,7 +66,7 @@ def detect_and_classify(image):
         return f"❌ Lỗi: {str(e)}", "0đ"
 
 with gr.Blocks(theme=gr.themes.Soft()) as demo:
-    gr.Markdown("## 🍱 Nhận Diện Món Ăn & Tính Tiền - Web App (.keras)")
+    gr.Markdown("## 🍱 Nhận Diện Món Ăn & Tính Tiền")
     with gr.Row():
         image_input = gr.Image(type="numpy", label="📷 Ảnh khay cơm")
     with gr.Row():
