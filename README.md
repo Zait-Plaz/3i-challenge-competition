@@ -27,7 +27,7 @@ Dự án này xây dựng một hệ thống trí tuệ nhân tạo có khả n�
 
 ### 2. Cài đặt thư viện
 ```bash
-cd Path/to/file.py
+cd Path/to/filefolder
 ```
 ```bash
 pip install gradio ultralytics tensorflow opencv-python numpy
@@ -43,7 +43,7 @@ pip install gradio ultralytics tensorflow opencv-python numpy
 
 1. **Chạy ứng dụng**:(qua powershell/CMD)
 ```bash
-cd Path/to/file.py
+cd Path/to/filefolder
 ```
 
 ```bash
