@@ -1,0 +1,5 @@
+gradio==4.22.0
+opencv-python
+numpy
+tensorflow
+ultralytics==8.1.24
