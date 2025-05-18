@@ -40,7 +40,7 @@ pip install gradio ultralytics tensorflow opencv-python numpy
 
 1. **Chạy ứng dụng**:
 ```bash
-python MainInterfaces.py
+python Main.py
 ```
 
 2. **Tải ảnh khay cơm** qua giao diện Gradio.
