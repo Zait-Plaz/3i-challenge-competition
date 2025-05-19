@@ -34,7 +34,7 @@ pip install gradio ultralytics tensorflow opencv-python numpy
 ```
 
 ### 3. Chuẩn bị file mô hình
-- `yolov8n.pt` – mô hình YOLOv8 nhận diện khay thức ăn.
+- `yolov8s.pt` – mô hình YOLOv8 nhận diện khay thức ăn.
 - `cnn.keras` – mô hình phân loại món ăn.
 
 ---
