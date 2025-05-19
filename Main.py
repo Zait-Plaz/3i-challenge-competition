@@ -8,7 +8,7 @@ from datetime import datetime
 from ultralytics import YOLO
 
 os.makedirs("output", exist_ok=True)
-yolo_model = YOLO("Interface/yolov8n.pt")
+yolo_model = YOLO("Interface/yolov8s.pt")
 keras_model = tf.keras.models.load_model("Interface/cnn.keras")
 input_height, input_width = keras_model.input_shape[1:3]
 
@@ -85,7 +85,9 @@ with gr.Blocks(title="Nhận Diện Món Ăn - UEH", theme=gr.themes.Soft(primar
             show_download_button=False,
             height=60
         )
+
     gr.HTML("<h1 style='text-align:center;'> ỨNG DỤNG NHẬN DIỆN MÓN ĂN </h1>")
+
     with gr.Group():
         with gr.Row():
             image_input = gr.Image(type="numpy", label=" Ảnh đầu vào ", scale=1, visible=True)
@@ -99,18 +101,21 @@ with gr.Blocks(title="Nhận Diện Món Ăn - UEH", theme=gr.themes.Soft(primar
             total_output = gr.Textbox(label="💵 Tổng hóa đơn", max_lines=1, visible=False)
 
         qr_output = gr.Image(label=" Mã QR thanh toán ", visible=False, height=200)
-        done_btn = gr.Button("✅ Tôi đã thanh toán")
+        payment_status = gr.Markdown("", visible=False)
+        done_btn = gr.Button("✅ Tôi đã thanh toán", visible=False)
 
     def handle_input(img):
         if img is None:
-            return "❌ Vui lòng tải ảnh!", "0đ", None, None, gr.update(value="Vui lòng tải ảnh!", visible=True)
+            return "❌ Vui lòng tải ảnh!", "0đ", None, None, gr.update(value="Vui lòng tải ảnh!", visible=True), gr.update(visible=False), gr.update(visible=False)
         result_text, total_text, processed_image, qr_path = detect_and_classify(img)
         return (
             gr.update(value=result_text, visible=True),
             gr.update(value=total_text, visible=True),
             gr.update(value=processed_image, visible=True),
             gr.update(value=qr_path, visible=True),
-            gr.update(value="", visible=False)
+            gr.update(value="", visible=False), 
+            gr.update(visible=False),
+            gr.update(visible=True)
         )
 
     def reset_ui():
@@ -120,25 +125,28 @@ with gr.Blocks(title="Nhận Diện Món Ăn - UEH", theme=gr.themes.Soft(primar
             gr.update(value="", visible=False),
             gr.update(value="", visible=False),
             gr.update(visible=False),
-            gr.update(value="", visible=False)
+            gr.update(value="", visible=False),
+            gr.update(value="", visible=False),
+            gr.update(visible=False)
         )
 
     def show_loading():
         return gr.update(value="⏳ Đang xử lý ảnh, vui lòng chờ trong giây lát...", visible=True)
 
+    def show_payment_success():
+        return gr.update(value="✅ Đã thanh toán", visible=True)
+
     btn.click(fn=show_loading, inputs=[], outputs=[status_label])\
        .then(fn=handle_input, inputs=image_input,
-             outputs=[food_output, total_output, image_output, qr_output, status_label])
+             outputs=[food_output, total_output, image_output, qr_output, status_label, payment_status, done_btn])
 
-    done_btn.click(
-        fn=reset_ui,
-        inputs=[],
-        outputs=[image_input, image_output, food_output, total_output, qr_output, status_label]
-    )
+    done_btn.click(fn=show_payment_success, inputs=[], outputs=[payment_status])\
+            .then(fn=reset_ui, inputs=[], outputs=[
+                image_input, image_output, food_output,
+                total_output, qr_output, status_label, payment_status, done_btn
+            ])
 
-    gr.HTML(
-        "<p style='text-align:center; font-size:12px; color:gray'>Ảnh sau xử lý sẽ được lưu vào thư mục <code>output/</code>.</p>"
-    )
+    gr.HTML("<p style='text-align:center; font-size:12px; color:gray'>Ảnh sau xử lý sẽ được lưu vào thư mục <code>output/</code>.</p>")
     gr.HTML("<center style='color:gray'>© 2025 - Đồ án Trí tuệ Nhân tạo - UEH</center>")
 
 if __name__ == "__main__":
